@@ -1,5 +1,6 @@
 package com.github.pfichtner.httpwithspring.web;
 
+import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.notFound;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.github.pfichtner.httpwithspring.domain.Berechtigung;
 import com.github.pfichtner.httpwithspring.domain.BerechtigungenService;
@@ -33,15 +35,18 @@ class BerechtigungenController {
 	}
 
 	@PutMapping("/{id}")
-	public void putBerechtigung(@PathVariable UUID id, @RequestBody Berechtigung berechtigung) {
+	public ResponseEntity<Object> putBerechtigung(@PathVariable UUID id, @RequestBody Berechtigung berechtigung) {
 		berechtigung.setId(new BerechtigungsId(id));
-		service.save(berechtigung);
+		return service.save(berechtigung)
+				? created(ServletUriComponentsBuilder.fromCurrentRequest().build().toUri()).build()
+				: noContent().build();
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> deleteBerechtigung(@PathVariable UUID id) {
-		boolean deleted = service.delete(new BerechtigungsId(id));
-		return (deleted ? noContent() : notFound()).build();
+		return (service.delete(new BerechtigungsId(id)) //
+				? noContent() //
+				: notFound()).build();
 	}
 
 }

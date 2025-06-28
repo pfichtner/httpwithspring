@@ -18,8 +18,10 @@ class DefaultBerechtigungenService implements BerechtigungenService {
 		return repo.findById(id);
 	}
 
-	public void save(Berechtigung berechtigung) {
+	public boolean save(Berechtigung berechtigung) {
+		Optional<Berechtigung> optional = load(berechtigung.getId());
 		repo.save(berechtigung);
+		return !optional.isPresent();
 	}
 
 	@Override
