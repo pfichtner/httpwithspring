@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pfichtner.httpwithspring.data.BerechtigungenJpaRepository;
 import com.github.pfichtner.httpwithspring.domain.Berechtigung;
-import com.github.pfichtner.httpwithspring.domain.BerechtigungenService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,23 +22,24 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BerechtigungenController {
 
-	private final BerechtigungenService service;
+	private final BerechtigungenJpaRepository repo;
 
 	@GetMapping("/berechtigungen/{id}")
 	public ResponseEntity<Berechtigung> getBerechtigung(@PathVariable UUID id) {
-		return ResponseEntity.of(service.load(id));
+		return ResponseEntity.of(repo.findById(id));
 	}
 
 	@PutMapping("/berechtigungen/{id}")
 	public void putBerechtigung(@PathVariable UUID id, @RequestBody Berechtigung berechtigung) {
 		berechtigung.setId(id);
-		service.save(berechtigung);
+		repo.save(berechtigung);
 	}
 
 	@DeleteMapping("/berechtigungen/{id}")
 	public ResponseEntity<Object> deleteBerechtigung(@PathVariable UUID id) {
-		boolean deleted = service.delete(id);
-		return (deleted ? noContent() : notFound()).build();
+		boolean wasPresent = repo.findById(id).isPresent();
+		repo.deleteById(id);
+		return (wasPresent ? noContent() : notFound()).build();
 	}
 
 }
