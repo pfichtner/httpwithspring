@@ -21,9 +21,9 @@ class DefaultBerechtigungenRepository implements Berechtigungen {
 	}
 
 	public boolean save(Berechtigung berechtigung) {
-		boolean wasPresent = load(berechtigung.getId()).isPresent();
+		boolean found = load(berechtigung.getId()).isPresent();
 		jpaDelegate.save(BerechtigungEntity.fromDomain(berechtigung));
-		return !wasPresent;
+		return !found;
 	}
 
 	@Override
