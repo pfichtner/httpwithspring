@@ -20,16 +20,16 @@ class DefaultBerechtigungenService implements BerechtigungenService {
 	}
 
 	public boolean save(Berechtigung berechtigung) {
-		Optional<Berechtigung> optional = load(berechtigung.getId());
+		boolean found = load(berechtigung.getId()).isPresent();
 		repo.save(berechtigung);
-		return !optional.isPresent();
+		return !found;
 	}
 
 	@Override
 	public boolean delete(UUID id) {
-		Optional<Berechtigung> optional = load(id);
+		boolean found = load(id).isPresent();
 		repo.deleteById(id);
-		return optional.isPresent();
+		return found;
 	}
 
 }
