@@ -6,7 +6,7 @@ public interface Berechtigungen {
 
 	Optional<Berechtigung> load(BerechtigungsId id);
 
-	void save(Berechtigung berechtigung);
+	boolean save(Berechtigung berechtigung);
 
 	boolean delete(BerechtigungsId berechtigung);
 

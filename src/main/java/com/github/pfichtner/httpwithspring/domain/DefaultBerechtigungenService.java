@@ -16,8 +16,8 @@ class DefaultBerechtigungenService implements BerechtigungenService {
 		return berechtigungen.load(id);
 	}
 
-	public void save(Berechtigung berechtigung) {
-		berechtigungen.save(berechtigung);
+	public boolean save(Berechtigung berechtigung) {
+		return berechtigungen.save(berechtigung);
 	}
 
 	@Override

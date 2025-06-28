@@ -20,8 +20,10 @@ class DefaultBerechtigungenRepository implements Berechtigungen {
 		return jpaDelegate.findById(id.value()).map(BerechtigungEntity::toDomain);
 	}
 
-	public void save(Berechtigung berechtigung) {
+	public boolean save(Berechtigung berechtigung) {
+		boolean wasPresent = load(berechtigung.getId()).isPresent();
 		jpaDelegate.save(BerechtigungEntity.fromDomain(berechtigung));
+		return !wasPresent;
 	}
 
 	@Override
