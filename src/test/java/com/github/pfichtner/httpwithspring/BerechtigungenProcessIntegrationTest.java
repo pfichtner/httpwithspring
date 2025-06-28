@@ -4,17 +4,21 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.net.URI;
 import java.util.UUID;
 
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -36,10 +40,15 @@ class BerechtigungenProcessIntegrationTest {
 					    "foobar": "foobar-idempotent"
 					}
 					""".formatted(uuid);
-			mockMvc.perform(put("/berechtigungen/" + uuid) //
+			ResultActions result = mockMvc.perform(put("/berechtigungen/" + uuid) //
 					.contentType(APPLICATION_JSON) //
-					.content(putPayload)) //
-					.andExpect(i == 0 ? status().isCreated() : status().isNoContent());
+					.content(putPayload));
+			if (i == 0) {
+				result.andExpect(status().isCreated()) //
+						.andExpect(header().string("Location", hasPath("/berechtigungen/" + uuid)));
+			} else {
+				result.andExpect(status().isNoContent());
+			}
 		}
 
 		// Confirm GET returns correct data
@@ -139,6 +148,33 @@ class BerechtigungenProcessIntegrationTest {
 		// Confirm GET returns 404
 		mockMvc.perform(get("/berechtigungen/" + uuid)) //
 				.andExpect(status().isNotFound());
+	}
+
+	private static TypeSafeMatcher<String> hasPath(String expectedPath) {
+		return new TypeSafeMatcher<>() {
+			@Override
+			protected boolean matchesSafely(String actual) {
+				try {
+					return expectedPath.equals(URI.create(actual).getPath());
+				} catch (Exception e) {
+					return false;
+				}
+			}
+
+			@Override
+			public void describeTo(Description description) {
+				description.appendText("a URL with path ").appendValue(expectedPath);
+			}
+
+			@Override
+			protected void describeMismatchSafely(String actual, Description mismatchDescription) {
+				try {
+					mismatchDescription.appendText("path was ").appendValue(URI.create(actual).getPath());
+				} catch (Exception e) {
+					mismatchDescription.appendText("was not a valid URI: ").appendValue(actual);
+				}
+			}
+		};
 	}
 
 }
