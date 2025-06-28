@@ -38,9 +38,9 @@ class BerechtigungenController {
 		berechtigung.setId(id);
 		boolean wasPresent = repo.findById(id).isPresent();
 		repo.save(berechtigung);
-		return !wasPresent //
-				? created(ServletUriComponentsBuilder.fromCurrentRequest().build().toUri()).build() //
-				: noContent().build();
+		return wasPresent //
+				? noContent().build() //
+				: created(ServletUriComponentsBuilder.fromCurrentRequest().build().toUri()).build();
 	}
 
 	@DeleteMapping("/{id}")
