@@ -37,7 +37,7 @@ class BerechtigungenProcessIntegrationTest {
 			mockMvc.perform(put("/berechtigungen/" + uuid) //
 					.contentType(APPLICATION_JSON) //
 					.content(putPayload)) //
-					.andExpect(status().isOk());
+					.andExpect(i == 0 ? status().isCreated() : status().isNoContent());
 		}
 
 		// Confirm GET returns correct data
@@ -64,7 +64,7 @@ class BerechtigungenProcessIntegrationTest {
 		mockMvc.perform(put("/berechtigungen/" + uuid) //
 				.contentType(APPLICATION_JSON) //
 				.content(putPayload)) //
-				.andExpect(status().isOk());
+				.andExpect(status().isCreated());
 
 		mockMvc.perform(get("/berechtigungen/" + uuid)) //
 				.andExpect(status().isOk()) //
@@ -84,7 +84,7 @@ class BerechtigungenProcessIntegrationTest {
 		mockMvc.perform(put("/berechtigungen/" + uuid) //
 				.contentType(APPLICATION_JSON) //
 				.content(putPayload)) //
-				.andExpect(status().isOk());
+				.andExpect(status().isNoContent());
 
 		// Check GET returns updated content
 		mockMvc.perform(get("/berechtigungen/" + uuid)) //
@@ -116,7 +116,7 @@ class BerechtigungenProcessIntegrationTest {
 		mockMvc.perform(put("/berechtigungen/" + uuid) //
 				.contentType(APPLICATION_JSON) //
 				.content(putPayload)) //
-				.andExpect(status().isOk());
+				.andExpect(status().isCreated());
 
 		// Confirm GET works before delete
 		mockMvc.perform(get("/berechtigungen/" + uuid)) //

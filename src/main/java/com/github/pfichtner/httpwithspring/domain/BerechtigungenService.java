@@ -7,7 +7,7 @@ public interface BerechtigungenService {
 
 	Optional<Berechtigung> load(UUID id);
 
-	void save(Berechtigung berechtigung);
+	boolean save(Berechtigung berechtigung);
 
 	boolean delete(UUID id);
 
