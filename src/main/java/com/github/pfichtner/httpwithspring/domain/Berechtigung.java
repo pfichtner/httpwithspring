@@ -1,15 +1,30 @@
 package com.github.pfichtner.httpwithspring.domain;
 
-import lombok.Builder;
-import lombok.Value;
+import static lombok.AccessLevel.PRIVATE;
 
-@Value
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
+@Entity
+@Data
+@FieldDefaults(level = PRIVATE)
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder(toBuilder = true)
 public class Berechtigung {
 
+	@EmbeddedId
+	@JsonIgnore
 	BerechtigungsId id;
 	String foo;
-	int bar;
+	Integer bar;
 	String foobar;
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pfichtner.httpwithspring.domain.Berechtigung;
 import com.github.pfichtner.httpwithspring.domain.BerechtigungenService;
 import com.github.pfichtner.httpwithspring.domain.BerechtigungsId;
 
@@ -25,13 +26,14 @@ public class BerechtigungenController {
 	private final BerechtigungenService service;
 
 	@GetMapping("/berechtigungen/{uuid}")
-	public ResponseEntity<BerechtigungDTO> getBerechtigung(@PathVariable UUID uuid) {
-		return ResponseEntity.of(service.load(new BerechtigungsId(uuid)).map(BerechtigungDTO::fromDomain));
+	public ResponseEntity<Berechtigung> getBerechtigung(@PathVariable UUID uuid) {
+		return ResponseEntity.of(service.load(new BerechtigungsId(uuid)));
 	}
 
 	@PutMapping("/berechtigungen/{id}")
-	public void putBerechtigung(@PathVariable UUID id, @RequestBody BerechtigungDTO berechtigung) {
-		service.save(berechtigung.toDomain(id));
+	public void putBerechtigung(@PathVariable UUID id, @RequestBody Berechtigung berechtigung) {
+		berechtigung.setId(new BerechtigungsId(id));
+		service.save(berechtigung);
 	}
 
 	@DeleteMapping("/berechtigungen/{id}")
