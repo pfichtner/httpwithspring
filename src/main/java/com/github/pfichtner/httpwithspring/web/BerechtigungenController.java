@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/berechtigungen")
-public class BerechtigungenController {
+class BerechtigungenController {
 
 	private final BerechtigungenService service;
 
