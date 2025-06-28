@@ -25,9 +25,9 @@ public class BerechtigungenController {
 
 	private final BerechtigungenService service;
 
-	@GetMapping("/berechtigungen/{uuid}")
-	public ResponseEntity<Berechtigung> getBerechtigung(@PathVariable UUID uuid) {
-		return ResponseEntity.of(service.load(new BerechtigungsId(uuid)));
+	@GetMapping("/berechtigungen/{id}")
+	public ResponseEntity<Berechtigung> getBerechtigung(@PathVariable UUID id) {
+		return ResponseEntity.of(service.load(new BerechtigungsId(id)));
 	}
 
 	@PutMapping("/berechtigungen/{id}")
