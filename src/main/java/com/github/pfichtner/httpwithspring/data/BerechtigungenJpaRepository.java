@@ -3,8 +3,10 @@ package com.github.pfichtner.httpwithspring.data;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import com.github.pfichtner.httpwithspring.domain.Berechtigung;
 
-public interface BerechtigungenJpaRepository extends JpaRepository<Berechtigung, UUID> {
+@RepositoryRestResource(path = "berechtigungen")
+interface BerechtigungenJpaRepository extends JpaRepository<Berechtigung, UUID> {
 }

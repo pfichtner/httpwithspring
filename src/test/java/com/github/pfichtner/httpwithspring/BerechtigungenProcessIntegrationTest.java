@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -29,15 +30,16 @@ class BerechtigungenProcessIntegrationTest {
 		for (int i = 0; i < 3; i++) {
 			String putPayload = """
 					{
+					    "id": "%s",
 					    "foo": "foo-idempotent",
 					    "bar": 123,
 					    "foobar": "foobar-idempotent"
 					}
-					""";
+					""".formatted(uuid);
 			mockMvc.perform(put("/berechtigungen/" + uuid) //
 					.contentType(APPLICATION_JSON) //
 					.content(putPayload)) //
-					.andExpect(status().isOk());
+					.andExpect(i == 0 ? status().isCreated() : status().isNoContent());
 		}
 
 		// Confirm GET returns correct data
@@ -56,15 +58,16 @@ class BerechtigungenProcessIntegrationTest {
 		String putPayload;
 		putPayload = """
 				{
+				    "id": "%s",
 					"foo": "foo-value",
 					"bar": 42,
 					"foobar": "foobar-value"
 				}
-				""";
+				""".formatted(uuid);
 		mockMvc.perform(put("/berechtigungen/" + uuid) //
 				.contentType(APPLICATION_JSON) //
 				.content(putPayload)) //
-				.andExpect(status().isOk());
+				.andExpect(status().isCreated());
 
 		mockMvc.perform(get("/berechtigungen/" + uuid)) //
 				.andExpect(status().isOk()) //
@@ -75,16 +78,17 @@ class BerechtigungenProcessIntegrationTest {
 		// Update with PUT using new data
 		putPayload = """
 				{
+				    "id": "%s",
 					"foo": "new-foo-value",
 					"bar": 99,
 					"foobar": "new-foobar-value"
 				}
-				""";
+				""".formatted(uuid);
 
 		mockMvc.perform(put("/berechtigungen/" + uuid) //
 				.contentType(APPLICATION_JSON) //
 				.content(putPayload)) //
-				.andExpect(status().isOk());
+				.andExpect(status().isNoContent());
 
 		// Check GET returns updated content
 		mockMvc.perform(get("/berechtigungen/" + uuid)) //
@@ -106,17 +110,18 @@ class BerechtigungenProcessIntegrationTest {
 
 		String putPayload = """
 				{
+				    "id": "%s",
 				    "foo": "foo-to-delete",
 				    "bar": 123,
 				    "foobar": "foobar-to-delete"
 				}
-				""";
+				""".formatted(uuid);
 
 		// Create entry
 		mockMvc.perform(put("/berechtigungen/" + uuid) //
 				.contentType(APPLICATION_JSON) //
 				.content(putPayload)) //
-				.andExpect(status().isOk());
+				.andExpect(status().isCreated());
 
 		// Confirm GET works before delete
 		mockMvc.perform(get("/berechtigungen/" + uuid)) //
