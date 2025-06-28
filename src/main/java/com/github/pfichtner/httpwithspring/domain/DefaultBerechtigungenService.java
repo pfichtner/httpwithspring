@@ -1,6 +1,7 @@
 package com.github.pfichtner.httpwithspring.domain;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ class DefaultBerechtigungenService implements BerechtigungenService {
 
 	private final BerechtigungenJpaRepository repo;
 
-	public Optional<Berechtigung> load(BerechtigungsId id) {
+	public Optional<Berechtigung> load(UUID id) {
 		return repo.findById(id);
 	}
 
@@ -23,7 +24,7 @@ class DefaultBerechtigungenService implements BerechtigungenService {
 	}
 
 	@Override
-	public boolean delete(BerechtigungsId id) {
+	public boolean delete(UUID id) {
 		Optional<Berechtigung> optional = load(id);
 		repo.deleteById(id);
 		return optional.isPresent();

@@ -1,13 +1,14 @@
 package com.github.pfichtner.httpwithspring.domain;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface BerechtigungenService {
 
-	Optional<Berechtigung> load(BerechtigungsId id);
+	Optional<Berechtigung> load(UUID id);
 
 	void save(Berechtigung berechtigung);
 
-	boolean delete(BerechtigungsId id);
+	boolean delete(UUID id);
 
 }
