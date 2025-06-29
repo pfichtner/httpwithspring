@@ -4,6 +4,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,10 +35,10 @@ class BerechtigungenProcessIntegrationTest {
 		for (int i = 0; i < 3; i++) {
 			String putPayload = """
 					{
-					    "id": "%s",
-					    "foo": "foo-idempotent",
-					    "bar": 123,
-					    "foobar": "foobar-idempotent"
+						"id": "%s",
+						"foo": "foo-idempotent",
+						"bar": 123,
+						"foobar": "foobar-idempotent"
 					}
 					""".formatted(uuid);
 			ResultActions result = mockMvc.perform(put("/berechtigungen/" + uuid) //
@@ -47,7 +48,8 @@ class BerechtigungenProcessIntegrationTest {
 				result.andExpect(status().isCreated()) //
 						.andExpect(header().string("Location", hasPath("/berechtigungen/" + uuid)));
 			} else {
-				result.andExpect(status().isNoContent());
+				result.andExpect(content().string("")) //
+						.andExpect(status().isNoContent());
 			}
 		}
 
@@ -87,7 +89,7 @@ class BerechtigungenProcessIntegrationTest {
 		// Update with PUT using new data
 		putPayload = """
 				{
-				    "id": "%s",
+					"id": "%s",
 					"foo": "new-foo-value",
 					"bar": 99,
 					"foobar": "new-foobar-value"
@@ -97,6 +99,7 @@ class BerechtigungenProcessIntegrationTest {
 		mockMvc.perform(put("/berechtigungen/" + uuid) //
 				.contentType(APPLICATION_JSON) //
 				.content(putPayload)) //
+				.andExpect(content().string("")) //
 				.andExpect(status().isNoContent());
 
 		// Check GET returns updated content
@@ -119,10 +122,10 @@ class BerechtigungenProcessIntegrationTest {
 
 		String putPayload = """
 				{
-				    "id": "%s",
-				    "foo": "foo-to-delete",
-				    "bar": 123,
-				    "foobar": "foobar-to-delete"
+					"id": "%s",
+					"foo": "foo-to-delete",
+					"bar": 123,
+					"foobar": "foobar-to-delete"
 				}
 				""".formatted(uuid);
 
@@ -139,6 +142,7 @@ class BerechtigungenProcessIntegrationTest {
 
 		// Delete entry, HttpStatus will be 204
 		mockMvc.perform(delete("/berechtigungen/" + uuid)) //
+				.andExpect(content().string("")) //
 				.andExpect(status().isNoContent());
 
 		// Attempt to delete already deleted entry, HttpStatus will be 404
