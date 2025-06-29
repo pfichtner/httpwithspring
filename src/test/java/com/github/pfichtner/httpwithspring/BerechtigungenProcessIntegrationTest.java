@@ -67,7 +67,7 @@ class BerechtigungenProcessIntegrationTest {
 		String putPayload;
 		putPayload = """
 				{
-				    "id": "%s",
+					"id": "%s",
 					"foo": "foo-value",
 					"bar": 42,
 					"foobar": "foobar-value"
