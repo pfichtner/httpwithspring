@@ -7,6 +7,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import com.github.pfichtner.httpwithspring.domain.Berechtigung;
 
-@RepositoryRestResource(path = "berechtigungen")
+@RepositoryRestResource(path = "berechtigungen", collectionResourceRel = "berechtigungen")
 interface BerechtigungenJpaRepository extends JpaRepository<Berechtigung, UUID> {
 }
