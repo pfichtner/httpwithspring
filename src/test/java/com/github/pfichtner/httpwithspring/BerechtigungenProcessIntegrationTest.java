@@ -34,12 +34,11 @@ class BerechtigungenProcessIntegrationTest {
 		for (int i = 0; i < 3; i++) {
 			String putPayload = """
 					{
-					    "id": "%s",
 					    "foo": "foo-idempotent",
 					    "bar": 123,
 					    "foobar": "foobar-idempotent"
 					}
-					""".formatted(uuid);
+					""";
 			ResultActions result = mockMvc.perform(put("/berechtigungen/" + uuid) //
 					.contentType(APPLICATION_JSON) //
 					.content(putPayload));
@@ -67,12 +66,11 @@ class BerechtigungenProcessIntegrationTest {
 		String putPayload;
 		putPayload = """
 				{
-				    "id": "%s",
 					"foo": "foo-value",
 					"bar": 42,
 					"foobar": "foobar-value"
 				}
-				""".formatted(uuid);
+				""";
 		mockMvc.perform(put("/berechtigungen/" + uuid) //
 				.contentType(APPLICATION_JSON) //
 				.content(putPayload)) //
@@ -87,12 +85,11 @@ class BerechtigungenProcessIntegrationTest {
 		// Update with PUT using new data
 		putPayload = """
 				{
-				    "id": "%s",
 					"foo": "new-foo-value",
 					"bar": 99,
 					"foobar": "new-foobar-value"
 				}
-				""".formatted(uuid);
+				""";
 
 		mockMvc.perform(put("/berechtigungen/" + uuid) //
 				.contentType(APPLICATION_JSON) //
@@ -119,12 +116,11 @@ class BerechtigungenProcessIntegrationTest {
 
 		String putPayload = """
 				{
-				    "id": "%s",
 				    "foo": "foo-to-delete",
 				    "bar": 123,
 				    "foobar": "foobar-to-delete"
 				}
-				""".formatted(uuid);
+				""";
 
 		// Create entry
 		mockMvc.perform(put("/berechtigungen/" + uuid) //
