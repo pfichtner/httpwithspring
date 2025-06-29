@@ -1,0 +1,5 @@
+{
+    "foo": "created via",
+    "bar": 4711,
+    "foobar": "curl in docker"
+}

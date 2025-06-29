@@ -1,0 +1,39 @@
+#!/bin/bash
+
+set -e
+
+# Set the Docker image to use
+# DOCKER_IMAGE="curlimages/curl"
+DOCKER_IMAGE="alpine/curl"
+
+# Get current hostname
+HOST=$(hostname)
+echo "Using hostname: $HOST"
+
+# Generate a new UUID for the resource
+RESOURCE_ID=$(uuid)
+# If your system uses `uuidgen` instead of `uuid`, replace above line with:
+# RESOURCE_ID=$(uuidgen)
+
+echo "Generated RESOURCE_ID: $RESOURCE_ID"
+
+# Define common variables
+JSON_FILE="berechtigung.json"
+BASE_URL="http://$HOST:8080/berechtigungen/$RESOURCE_ID"
+
+# Run PUT request
+echo "PUTing the content of $JSON_FILE to $BASE_URL..."
+docker run --rm -it -v "$PWD:/work" "$DOCKER_IMAGE" \
+  -X PUT -d@/work/$JSON_FILE \
+  -H "Content-Type: application/json" \
+  "$BASE_URL"
+
+# Run GET request
+echo -e "\nFetching resource from $BASE_URL..."
+docker run --rm -it -v "$PWD:/work" "$DOCKER_IMAGE" \
+  "$BASE_URL"
+
+# Show docker image size
+BYTES=$(docker image inspect "$DOCKER_IMAGE" --format='{{.Size}}')
+MEGABYTES=$(echo "scale=2; $BYTES/1024/1024" | bc)
+echo -e "\nAll this was done with a docker image ('$DOCKER_IMAGE') with a size of $MEGABYTES MiB ($BYTES bytes)"
