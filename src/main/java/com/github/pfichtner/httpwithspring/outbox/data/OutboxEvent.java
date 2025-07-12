@@ -30,7 +30,7 @@ public class OutboxEvent {
 	@Id
 	@GeneratedValue
 	UUID id;
-	final Instant timestamp = Instant.now();
+	final Instant createdAt = Instant.now();
 	@Column(nullable = false)
 	boolean published;
 	String aggregateType;

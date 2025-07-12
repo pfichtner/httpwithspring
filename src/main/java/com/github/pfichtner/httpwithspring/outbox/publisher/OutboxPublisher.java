@@ -1,5 +1,9 @@
 package com.github.pfichtner.httpwithspring.outbox.publisher;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
+import java.time.Instant;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +27,11 @@ public class OutboxPublisher {
 			messagePublisher.publish(event);
 			outboxRepo.save(event.published(true));
 		}
+	}
+
+	@Scheduled(cron = "0 0 * * * *")
+	public void cleanUpOldEvents() {
+		outboxRepo.deleteByPublishedIsTrueAndCreatedAtBefore(Instant.now().minus(7, DAYS));
 	}
 
 }

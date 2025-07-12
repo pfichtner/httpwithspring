@@ -46,12 +46,12 @@ class BerechtigungenOutboxEventIntegrationTest {
 
 		OutboxEvent expectedEvent = OutboxEvent.builder() //
 				.aggregateType("Berechtigung") //
-				.type("BerechtigungCreated") //
+				.type("created") //
 				.aggregateId(uuid.toString()) //
 				.build();
 		assertThat(outboxRepository.findUnpublished()).singleElement() //
 				.satisfies(e -> assertThat(e.id()).isNotNull()) //
-				.usingRecursiveComparison().ignoringFields("id", "timestamp").isEqualTo(expectedEvent);
+				.usingRecursiveComparison().ignoringFields("id", "createdAt").isEqualTo(expectedEvent);
 	}
 
 }
