@@ -31,21 +31,18 @@ class OutboxPublisherScheduledTest {
 
 	@Test
 	void scheduledPublishEventsRunsAndPublishes() throws InterruptedException {
-		var savedEvent = outboxRepo.save(new OutboxEvent().setPublished(false).setAggregateType("test")
-				.setType("created").setAggregateId("123"));
-		assertThat(outboxRepo.findById(savedEvent.getId()))
-				.hasValueSatisfying(v -> assertThat(v.isPublished()).isFalse());
+		var saved = outboxRepo.save(new OutboxEvent().setPublished(false).setAggregateType("test").setType("created")
+				.setAggregateId("123"));
+		assertThat(outboxRepo.findById(saved.getId())).hasValueSatisfying(e -> assertThat(e.isPublished()).isFalse());
 		await().untilAsserted(() -> {
 			verify(messagePublisher).publish(argThat( //
 					// allow slight difference in createdAt (e.g. within 1 millisecond)
-					e -> e.getId().equals(savedEvent.getId()) //
-							&& e.getAggregateType().equals(savedEvent.getAggregateType())
-							&& e.getAggregateId().equals(savedEvent.getAggregateId())
-							&& e.getType().equals(savedEvent.getType())
-							&& abs(e.getCreatedAt().toEpochMilli() - savedEvent.getCreatedAt().toEpochMilli()) < 1));
+					e -> e.getId().equals(saved.getId()) //
+							&& e.getAggregateType().equals(saved.getAggregateType())
+							&& e.getAggregateId().equals(saved.getAggregateId()) && e.getType().equals(saved.getType())
+							&& abs(e.getCreatedAt().toEpochMilli() - saved.getCreatedAt().toEpochMilli()) < 1));
 		});
-		assertThat(outboxRepo.findById(savedEvent.getId()))
-				.hasValueSatisfying(v -> assertThat(v.isPublished()).isTrue());
+		assertThat(outboxRepo.findById(saved.getId())).hasValueSatisfying(v -> assertThat(v.isPublished()).isTrue());
 	}
 
 }
