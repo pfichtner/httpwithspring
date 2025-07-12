@@ -21,6 +21,9 @@ public class OutboxPublisher {
 
 	private final MessagePublisher messagePublisher;
 
+	// we will have a possible delay of up to 5 seconds between event creation and
+	// its publishing. If that is not sufficient we have to add events to
+	// additionally publish events immediately after the transaction has finished.
 	@Scheduled(fixedDelay = 5000)
 	public void publishEvents() {
 		for (OutboxEvent event : outboxRepo.findUnpublished()) {
