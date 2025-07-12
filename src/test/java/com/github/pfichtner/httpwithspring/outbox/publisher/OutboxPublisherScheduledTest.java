@@ -38,12 +38,11 @@ class OutboxPublisherScheduledTest {
 		await().untilAsserted(() -> {
 			verify(messagePublisher).publish(argThat( //
 					// allow slight difference in createdAt (e.g. within 1 millisecond)
-					event -> event.getId().equals(savedEvent.getId()) //
-							&& event.isPublished() //
-							&& event.getAggregateType().equals(savedEvent.getAggregateType())
-							&& event.getAggregateId().equals(savedEvent.getAggregateId())
-							&& event.getType().equals(savedEvent.getType()) && abs(event.getCreatedAt().toEpochMilli()
-									- savedEvent.getCreatedAt().toEpochMilli()) < 1));
+					e -> e.getId().equals(savedEvent.getId()) //
+							&& e.getAggregateType().equals(savedEvent.getAggregateType())
+							&& e.getAggregateId().equals(savedEvent.getAggregateId())
+							&& e.getType().equals(savedEvent.getType())
+							&& abs(e.getCreatedAt().toEpochMilli() - savedEvent.getCreatedAt().toEpochMilli()) < 1));
 		});
 		assertThat(outboxRepo.findById(savedEvent.getId()))
 				.hasValueSatisfying(v -> assertThat(v.isPublished()).isTrue());
