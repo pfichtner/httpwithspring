@@ -1,6 +1,7 @@
 package com.github.pfichtner.httpwithspring.outbox.data;
 
 import static lombok.AccessLevel.PRIVATE;
+import static lombok.AccessLevel.PUBLIC;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -9,8 +10,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,11 +19,9 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @Data
 @FieldDefaults(level = PRIVATE)
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = PUBLIC)
 @Setter
-@Accessors(fluent = true, chain = true)
+@Accessors(chain = true)
 public class OutboxEvent {
 
 	@Id

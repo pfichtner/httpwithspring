@@ -19,11 +19,11 @@ public class BerechtigungEventHandler {
 
 	@HandleAfterCreate
 	public void handleCreate(Berechtigung entity) {
-		outboxRepo.save(OutboxEvent.builder() //
-				.aggregateType("Berechtigung") //
-				.type("created") //
-				.aggregateId(entity.getId().toString()) //
-				.build());
+		outboxRepo.save(new OutboxEvent() //
+				.setAggregateType("Berechtigung") //
+				.setType("created") //
+				.setAggregateId(entity.getId().toString()) //
+		);
 	}
 
 }

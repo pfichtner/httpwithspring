@@ -2,6 +2,7 @@ package com.github.pfichtner.httpwithspring.outbox;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import java.util.UUID;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.github.pfichtner.httpwithspring.outbox.data.OutboxEvent;
@@ -21,6 +23,7 @@ import com.github.pfichtner.httpwithspring.outbox.publisher.OutboxPublisher;
 @AutoConfigureMockMvc
 // prevent forwarding of unpublished events by "disabling" OutboxPublisher
 @ImportAutoConfiguration(exclude = OutboxPublisher.class)
+@DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
 class BerechtigungenOutboxEventIntegrationTest {
 
 	@Autowired
@@ -44,13 +47,13 @@ class BerechtigungenOutboxEventIntegrationTest {
 				.contentType(APPLICATION_JSON) //
 				.content(putPayload));
 
-		OutboxEvent expectedEvent = OutboxEvent.builder() //
-				.aggregateType("Berechtigung") //
-				.type("created") //
-				.aggregateId(uuid.toString()) //
-				.build();
+		OutboxEvent expectedEvent = new OutboxEvent() //
+				.setAggregateType("Berechtigung") //
+				.setType("created") //
+				.setAggregateId(uuid.toString()) //
+		;
 		assertThat(outboxRepository.findUnpublished()).singleElement() //
-				.satisfies(e -> assertThat(e.id()).isNotNull()) //
+				.satisfies(e -> assertThat(e.getId()).isNotNull()) //
 				.usingRecursiveComparison().ignoringFields("id", "createdAt").isEqualTo(expectedEvent);
 	}
 

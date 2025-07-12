@@ -25,7 +25,7 @@ public class OutboxPublisher {
 	public void publishEvents() {
 		for (OutboxEvent event : outboxRepo.findUnpublished()) {
 			messagePublisher.publish(event);
-			outboxRepo.save(event.published(true));
+			outboxRepo.save(event.setPublished(true));
 		}
 	}
 

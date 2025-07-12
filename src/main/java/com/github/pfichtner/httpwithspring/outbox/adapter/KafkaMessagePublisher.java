@@ -18,9 +18,9 @@ public class KafkaMessagePublisher implements MessagePublisher {
 
 	@Override
 	public void publish(OutboxEvent event) {
-		String topic = resolveTopic(event.type());
+		String topic = resolveTopic(event.getType());
 //        kafkaTemplate.send(topic, event.getAggregateId(), event.getPayload());
-		System.out.println(format("kafkaTemplate.send(%s, %s, %s);", topic, event.aggregateId(), event.payload()));
+		System.out.println(format("kafkaTemplate.send(%s, %s, %s);", topic, event.getAggregateId(), event.getPayload()));
 //        
 	}
 
