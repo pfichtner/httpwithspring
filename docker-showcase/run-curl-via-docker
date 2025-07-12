@@ -5,21 +5,18 @@ set -e
 # Set the Docker image to use
 # DOCKER_IMAGE="curlimages/curl"
 DOCKER_IMAGE="alpine/curl"
-
-# Get current hostname
-HOST=$(hostname)
-echo "Using hostname: $HOST"
-
-# Generate a new UUID for the resource
-RESOURCE_ID=$(uuid)
-# If your system uses `uuidgen` instead of `uuid`, replace above line with:
-# RESOURCE_ID=$(uuidgen)
-
-echo "Generated RESOURCE_ID: $RESOURCE_ID"
-
 # Define common variables
 JSON_FILE="berechtigung.json"
-BASE_URL="http://$HOST:8080/berechtigungen/$RESOURCE_ID"
+HOST=$(hostname)
+
+# Generate a new UUID for the resource
+# RESOURCE_ID=$(uuid)
+# RESOURCE_ID=$(uuidgen)
+RESOURCE_ID=$(jq -er '.id' "$JSON_FILE")
+echo "Using RESOURCE_ID: $RESOURCE_ID"
+
+BASE_URL="http://${HOST}:8080/berechtigungen/$RESOURCE_ID"
+echo "Using URL : $BASE_URL"
 
 # Run PUT request
 echo "PUTing the content of $JSON_FILE to $BASE_URL..."
