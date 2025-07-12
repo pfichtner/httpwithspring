@@ -47,14 +47,14 @@ class BerechtigungenOutboxEventIntegrationTest {
 				.contentType(APPLICATION_JSON) //
 				.content(putPayload));
 
-		OutboxEvent expectedEvent = new OutboxEvent() //
+		var expected = new OutboxEvent() //
 				.setAggregateType("Berechtigung") //
 				.setType("created") //
 				.setAggregateId(uuid.toString()) //
 		;
 		assertThat(outboxRepository.findUnpublished()).singleElement() //
 				.satisfies(e -> assertThat(e.getId()).isNotNull()) //
-				.usingRecursiveComparison().ignoringFields("id", "createdAt").isEqualTo(expectedEvent);
+				.usingRecursiveComparison().ignoringFields("id", "createdAt").isEqualTo(expected);
 	}
 
 }

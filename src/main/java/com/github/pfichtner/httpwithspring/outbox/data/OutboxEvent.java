@@ -1,5 +1,6 @@
 package com.github.pfichtner.httpwithspring.outbox.data;
 
+import static java.time.temporal.ChronoUnit.MILLIS;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PUBLIC;
 
@@ -27,7 +28,7 @@ public class OutboxEvent {
 	@Id
 	@GeneratedValue
 	UUID id;
-	final Instant createdAt = Instant.now();
+	final Instant createdAt = Instant.now().truncatedTo(MILLIS);
 	@Column(nullable = false)
 	boolean published;
 	String aggregateType;
