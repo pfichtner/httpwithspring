@@ -15,16 +15,13 @@ import com.github.pfichtner.httpwithspring.outbox.data.OutboxEvent;
 import com.github.pfichtner.httpwithspring.outbox.data.OutboxEventRepository;
 
 @SpringBootTest
-class OutboxPublisherScheduledTest {
+class OutboxEventForwarderScheduledTest {
 
 	@Autowired
 	OutboxEventRepository outboxRepo;
 
-	@MockitoBean
+	@MockitoBean(enforceOverride = true)
 	MessagePublisher messagePublisher;
-
-	@Autowired
-	OutboxPublisher outboxPublisher;
 
 	@Test
 	void scheduledPublishEventsRunsAndPublishes() throws InterruptedException {

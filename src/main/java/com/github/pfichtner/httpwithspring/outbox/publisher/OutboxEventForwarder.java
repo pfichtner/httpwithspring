@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class OutboxPublisher {
+public class OutboxEventForwarder {
 
 	private final OutboxEventRepository outboxRepo;
 

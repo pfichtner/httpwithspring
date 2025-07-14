@@ -17,14 +17,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.github.pfichtner.httpwithspring.outbox.data.OutboxEvent;
 import com.github.pfichtner.httpwithspring.outbox.data.OutboxEventRepository;
-import com.github.pfichtner.httpwithspring.outbox.publisher.OutboxPublisher;
+import com.github.pfichtner.httpwithspring.outbox.publisher.OutboxEventForwarder;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 // prevent forwarding of unpublished events by "disabling" OutboxPublisher
-@ImportAutoConfiguration(exclude = OutboxPublisher.class)
+@ImportAutoConfiguration(exclude = OutboxEventForwarder.class)
 @DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
-class BerechtigungenOutboxEventIntegrationTest {
+class OutboxEventForwarderIntegrationTest {
 
 	@Autowired
 	MockMvc mockMvc;

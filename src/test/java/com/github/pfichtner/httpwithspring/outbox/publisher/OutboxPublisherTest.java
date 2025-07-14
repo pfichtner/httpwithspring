@@ -22,11 +22,11 @@ class OutboxPublisherTest {
 	OutboxEventRepository outboxRepo;
 
 	@InjectMocks
-	OutboxPublisher publisher;
+	OutboxEventForwarder forwarder;
 
 	@Test
 	void deletesPublishedEventsOlderThan7Days() {
-		publisher.cleanUpOldEvents();
+		forwarder.cleanUpOldEvents();
 		Instant expectedCutoff = Instant.now().minus(7, DAYS);
 		// Allow a few ms jitter due to Instant.now()
 		verify(outboxRepo).deleteByPublishedIsTrueAndCreatedAtBefore(
